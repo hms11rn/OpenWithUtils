@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 	string type = argv[2];
-	if (type != "cmd" && type != "cmdParent" && type!= "openWith") {
+	if (type != "cmd" && type != "cmdParent" && type!= "clipboardCopy") {
 		cout << "exit2" << endl;
 		return 0;
 	}
@@ -39,6 +39,21 @@ int main(int argc, char* argv[]) {
 		ShellExecute(0, "open", "cmd", cstr, 0, SW_SHOW);
 		cout << "ran command - " << run << endl;
 	}
+	else if (type == "clipboardCopy") {
+		const char* output = argv[1];
+		const size_t len = strlen(output) + 1;
+		HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, len);
+		memcpy(GlobalLock(hMem), output, len);
+		GlobalUnlock(hMem);
+		OpenClipboard(0);
+		EmptyClipboard();
+		SetClipboardData(CF_TEXT, hMem);
+		CloseClipboard();
+	}
 	
 	return 0;
+}
+
+void copyToClipBoard(string source) {
+	
 }
