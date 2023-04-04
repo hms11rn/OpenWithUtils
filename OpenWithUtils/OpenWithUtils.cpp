@@ -1,6 +1,6 @@
 ﻿// OpenWIthUtils.cpp : Defines the entry point for the application.
 //
-//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 #include "OpenWithUtils.h"
 #include "Windows.h"
