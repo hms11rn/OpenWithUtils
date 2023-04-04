@@ -1,6 +1,6 @@
 ﻿// OpenWIthUtils.cpp : Defines the entry point for the application.
 //
- #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 #include "OpenWithUtils.h"
 #include "Windows.h"
@@ -56,9 +56,9 @@ int main(int argc, char* argv[]) {
 
 	// very specific to x-plane .obj (same file extension different formats, so I am using this program to run it, detect which kind of format it is, then run the apporpriate app for it.
 	else if (type == "obj") {
-		if (argc != 5) {
+		if (argc < 5) {
 			return 1;
-	}
+		}
 		
 		string openWithDef = argv[3];
 		string openWithXP = argv[4];
@@ -89,19 +89,23 @@ int main(int argc, char* argv[]) {
 			cout << line3 << endl;
 
 			string location = argv[1];
-			string stRun = openWithDef + " \"" + location + "\""; // adding quotes to file path
-			openWithXP = "\"" + openWithXP + "\" " + location; // adding quotes to X-Plane Object viewer path
-			cout << stRun << endl;
 			if (line1.length() == 1 && line2 == "800" && line3 == "OBJ") {
-				cout << "Running X-Plane Object Viewer: " << openWithXP.c_str() << endl;
-				system(openWithXP.c_str());
+				cout << "Running X-Plane Object Viewer: " << openWithXP.c_str() << ("\"" + location + "\"") << endl;
+				ShellExecute(nullptr, "open", openWithXP.c_str(), ("\"" + location + "\"").c_str(), nullptr, SW_HIDE);
 			}
 			else {
 				cout << "Regular Obj" << endl;
-				string location = argv[1];
 				string locationWQuotes = "\"" + location + "\"";
-				ReplaceStringInPlace(openWithDef, "%2", locationWQuotes); // %2 is just to replace location
-				system(openWithDef.c_str());
+				ReplaceStringInPlace(openWithDef, "%2", locationWQuotes); // %2 is replace location
+				cout << openWithDef << endl;
+				if (argc == 6) {
+					ShellExecute(nullptr, "open", openWithDef.c_str(), ("\"" + location + "\"" + argv[5]).c_str(), nullptr, SW_HIDE);
+				}
+				else {
+					ShellExecute(nullptr, "open", openWithDef.c_str(), ("\"" + location + "\"").c_str(), nullptr, SW_HIDE);
+
+				}
+				
 			}
 			return 0;
 		}
